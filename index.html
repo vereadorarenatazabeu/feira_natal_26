@@ -8,10 +8,10 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
-      min-height: 100%; 
+      min-height: 100vh; 
       font-family: 'Roboto', Arial, sans-serif;
-      /* Imagem de fundo fixo com link direto do Imgur */
-      background: url('https://i.imgur.com/VM4kjwQ.jpeg') no-repeat center center fixed;
+      /* Fundo em gradiente com a paleta do evento (tons quentes e verde-escuro natalino) */
+      background: radial-gradient(circle at center, #2d1810 0%, #1a0f0a 40%, #0d1a12 100%) no-repeat center center fixed;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -128,7 +128,7 @@
 
   <script>
     // COLOQUE AQUI A SUA URL GERADA NO DEPLOY DO GOOGLE APPS SCRIPT
-    const WEBAPP_URL = 'SUA_NOVA_URL_DO_WEBAPP_GERADA_NO_DEPLOY';
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzAAaAqGMw7ZtsTmsX4BawfEK1MByUNwfM3DT2xEd6Fd1HzEVo0Ukc963XQRngJmZcJNg/exec';
 
     function mascarar(input, tipo){
       let v = input.value.replace(/\D/g,'');
