@@ -10,7 +10,7 @@
     body { 
       min-height: 100%; 
       font-family: 'Roboto', Arial, sans-serif;
-      /* Imagem como fundo fixo para evitar cortes */
+      /* Imagem de fundo fixo com link direto do Imgur */
       background: url('https://i.imgur.com/VM4kjwQ.jpeg') no-repeat center center fixed;
       background-size: cover;
       display: flex;
@@ -28,6 +28,48 @@
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    /* CABEÇALHO DO EVENTO (MOBILE / WEB) */
+    .form-header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .form-header .badge-natal {
+      display: inline-block;
+      background: #C53030;
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .form-header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #F6AD55;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .form-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      font-size: 12px;
+      color: #E2E8F0;
+      line-height: 1.4;
     }
     
     label { display: flex; flex-direction: column; font-weight: 600; margin-bottom: 12px; font-size: 11px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -65,6 +107,7 @@
 
     .msg { text-align: center; font-weight: bold; margin-top: 15px; padding: 10px; border-radius: 8px; font-size: 13px; display: none; background: #fff; }
     .msg.success { color: #155724; border-left: 5px solid #28a745; }
+    .msg.error { color: #721c24; border-left: 5px solid #dc3545; }
     
     #outroSegmentoDiv { display: none; margin-top: -5px; margin-bottom: 10px; }
     
@@ -78,12 +121,14 @@
       body { padding: 20px 0; }
       .form-container { width: 95%; padding: 15px; }
       input, select { font-size: 16px; padding: 12px; } /* Evita zoom no iPhone */
+      .form-header h1 { font-size: 18px; }
+      .form-header h2 { font-size: 14px; }
     }
   </style>
 
   <script>
-    // IMPORTANTE: COLOQUE AQUI A SUA URL GERADA NO DEPLOY DO GOOGLE
-    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzAAaAqGMw7ZtsTmsX4BawfEK1MByUNwfM3DT2xEd6Fd1HzEVo0Ukc963XQRngJmZcJNg/exec';
+    // COLOQUE AQUI A SUA URL GERADA NO DEPLOY DO GOOGLE APPS SCRIPT
+    const WEBAPP_URL = 'SUA_NOVA_URL_DO_WEBAPP_GERADA_NO_DEPLOY';
 
     function mascarar(input, tipo){
       let v = input.value.replace(/\D/g,'');
@@ -131,6 +176,7 @@
       submitBtn.disabled = true;
       submitBtn.value = 'ENVIANDO...';
       msgDiv.style.display = 'block';
+      msgDiv.className = 'msg';
       msgDiv.textContent = 'Enviando cadastro...';
 
       const segmentoFinal = document.getElementById('segmento').value === 'Outro' 
@@ -168,16 +214,17 @@
       try {
         await fetch(WEBAPP_URL, {
           method: 'POST',
+          mode: 'no-cors',
           body: JSON.stringify(dados),
           headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
         msg.textContent = '✅ Cadastro enviado com sucesso!';
         msg.className = 'msg success';
         document.querySelector('form').reset();
+        document.getElementById('outroSegmentoDiv').style.display = 'none';
       } catch(e) {
-        msg.textContent = '✅ Cadastro enviado com sucesso!';
-        msg.className = 'msg success';
-        document.querySelector('form').reset();
+        msg.textContent = '❌ Erro ao enviar cadastro. Tente novamente.';
+        msg.className = 'msg error';
       } finally {
         btn.disabled = false;
         btn.value = 'ENVIAR CADASTRO';
@@ -187,6 +234,15 @@
 </head>
 <body>
   <div class="form-container">
+    
+    <!-- CABEÇALHO DE IDENTIFICAÇÃO DO EVENTO -->
+    <div class="form-header">
+      <span class="badge-natal">Especial de Natal</span>
+      <h1>Feira das Empreendedoras</h1>
+      <h2>ELAS TRANSFORMAM</h2>
+      <p>Cadastro de Expositoras • Dia 29/11 das 14h às 19h</p>
+    </div>
+
     <form onsubmit="enviarDados(event)">
       <label>NOME <input type="text" id="nome" required></label>
       <label>DATA DE NASCIMENTO <input type="text" id="dataNascimento" required oninput="mascarar(this,'dataNascimento')" placeholder="dd/mm/aaaa"></label>
@@ -212,8 +268,3 @@
   </div>
 </body>
 </html>
-
-
-
-
-    
